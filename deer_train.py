@@ -59,14 +59,7 @@ def deer_move(deers):
     #print(deers)
     return deers
 
-def extract_position(deers,train):
-
-
-
-    return
-
-
-def ml_speed_influence(deers,train,ml_influence):
+def extract_deer_position(deers):
 
     deer_positions=[]
 
@@ -74,11 +67,26 @@ def ml_speed_influence(deers,train,ml_influence):
         b={'deer_coordinates_x':deer_x['deer_coordinates_x'],'deer_coordinates_y':deer_x['deer_coordinates_y']}
         deer_positions.append(dict(b))
 
-    ml_influence = [-5,-4,-3,-2,-1,0,1,2,3,4,5]
-    train['train_velocity'] = train['train_velocity'] + ml_influence
-    return train['train_velocity']
+    return deer_positions
+
+
+def extract_train_position(train):
+
+    train_position={'train_coordinates_x':train['train_coordinates_x'],'train_coordinates_y':train['train_coordinates_y']}
+
+    return train_position
+
+def ml_speed_decide(deer_position,train_position):
+
+    ml_influence_range = [-5,-4,-3,-2,-1,0,1,2,3,4,5]
+
+    return ml_influence
 
 def realtime_check(deers,train):
+
+    ml_acceleration_value=ml_speed_decide(extract_deer_position(deers),extract_train_position(train))
+    
+    train['train_velocity']=train['train_velocity']+ml_acceleration_value
 
     for deer_x in deers:
         y=0
