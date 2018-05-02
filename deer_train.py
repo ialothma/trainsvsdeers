@@ -1,139 +1,146 @@
 import random
 
-total_deer_number=1
-init_train={}
-init_deers=[]
 
-def generate_deer():
+class dvt():
 
-    deer_key = ['deer_number', 'deer_velocity', 'deer_coordinates_x', 'deer_coordinates_y']
-    deers = []
-    n = 0
-    while n < total_deer_number:
-        deerz = [n, 1, (random.randint(0, 1280)), (random.randint(1, 160))]
-        deers.append(dict(zip(deer_key, deerz)))
-        n = n + 1
-    return deers
+    total_deer_number = 20
+    game_status = True
+    def __init__(self, difficulty):
+        self.generate_deer()
+        self.generate_train()
+        self.reward = 0
+        total_deer_number = difficulty
 
-def generate_train():
+    def generate_deer(self):
 
-    train = {'train_number': 1, 'train_velocity': (random.randint(2, 10)),
-             'train_coordinates_x': (random.randint(0, 1280)), 'train_coordinates_y': 0}
-    return train
+        deer_key = ['deer_number', 'deer_velocity', 'deer_coordinates_x', 'deer_coordinates_y']
+        deers = []
+        n = 0
+        for n in range(self.total_deer_number):
+            deerz = [n, 1, (random.randint(0, 1280)), (random.randint(1, 160))]
+            deers.append(dict(zip(deer_key, deerz)))
+        self.deers = deers
 
-def train_move(train):
+    def generate_train(self):
 
-    train['train_coordinates_y'] = train['train_coordinates_y'] + train['train_velocity']
+        train = {'train_number': 1, 'train_velocity': (random.randint(2, 10)),
+                 'train_coordinates_x': (random.randint(0, 1280)), 'train_coordinates_y': 0}
+        self.train = train
 
-    return train
+    def train_move(self):
 
-
-def deer_move(deers):
-    movement_types=['fwd','fwd_r','fwd_l','bwd','bwd_r','bwd_l','left','right','stay']
-    for m in range(0,total_deer_number):
-        movement_decision = random.choice(movement_types)
-        #print('#########################################')
-        #print(movement_decision)
-        if movement_decision == 'fwd':
-            deers[m]['deer_coordinates_y'] = deers[m]['deer_coordinates_y'] + deers[m]['deer_velocity']
-        if movement_decision == 'fwd_r':
-            deers[m]['deer_coordinates_y'] = deers[m]['deer_coordinates_y'] + deers[m]['deer_velocity']
-            deers[m]['deer_coordinates_x'] = deers[m]['deer_coordinates_x'] + deers[m]['deer_velocity']
-        if movement_decision == 'fwd_l':
-            deers[m]['deer_coordinates_y'] = deers[m]['deer_coordinates_y'] + deers[m]['deer_velocity']
-            deers[m]['deer_coordinates_x'] = deers[m]['deer_coordinates_x'] - deers[m]['deer_velocity']
-        if movement_decision == 'bwd':
-            deers[m]['deer_coordinates_y'] = deers[m]['deer_coordinates_y'] - deers[m]['deer_velocity']
-        if movement_decision == 'bwd_r':
-            deers[m]['deer_coordinates_y'] = deers[m]['deer_coordinates_y'] - deers[m]['deer_velocity']
-            deers[m]['deer_coordinates_x'] = deers[m]['deer_coordinates_x'] + deers[m]['deer_velocity']
-        if movement_decision == 'bwd_l':
-            deers[m]['deer_coordinates_y'] = deers[m]['deer_coordinates_y'] - deers[m]['deer_velocity']
-            deers[m]['deer_coordinates_x'] = deers[m]['deer_coordinates_x'] - deers[m]['deer_velocity']
-        if movement_decision == 'right':
-            deers[m]['deer_coordinates_x'] = deers[m]['deer_coordinates_x'] + deers[m]['deer_velocity']
-        if movement_decision == 'left':
-            deers[m]['deer_coordinates_x'] = deers[m]['deer_coordinates_x'] - deers[m]['deer_velocity']
-        m=m+1
-    #print("###############NEW POSITIONING###########")
-    #print(deers)
-    return deers
-
-def extract_deer_position(deers):
-
-    deer_positions=[]
-
-    for deer_x in deers:
-        b={'deer_coordinates_x':deer_x['deer_coordinates_x'],'deer_coordinates_y':deer_x['deer_coordinates_y']}
-        deer_positions.append(dict(b))
-
-    return deer_positions
+        self.train['train_coordinates_y'] = self.train['train_coordinates_y'] + self.train['train_velocity']
 
 
-def extract_train_position(train):
 
-    train_position={'train_coordinates_x':train['train_coordinates_x'],'train_coordinates_y':train['train_coordinates_y']}
+    def deer_move(self):
+        movement_types=['fwd','fwd_r','fwd_l','bwd','bwd_r','bwd_l','left','right','stay']
+        for m in range(0,self.total_deer_number):
+            movement_decision = random.choice(movement_types)
+            #print('#########################################')
+            #print(movement_decision)
+            if movement_decision == 'fwd':
+                self.deers[m]['deer_coordinates_y'] = self.deers[m]['deer_coordinates_y'] + self.deers[m]['deer_velocity']
+            if movement_decision == 'fwd_r':
+                self.deers[m]['deer_coordinates_y'] = self.deers[m]['deer_coordinates_y'] + self.deers[m]['deer_velocity']
+                self.deers[m]['deer_coordinates_x'] = self.deers[m]['deer_coordinates_x'] + self.deers[m]['deer_velocity']
+            if movement_decision == 'fwd_l':
+                self.deers[m]['deer_coordinates_y'] = self.deers[m]['deer_coordinates_y'] + self.deers[m]['deer_velocity']
+                self.deers[m]['deer_coordinates_x'] = self.deers[m]['deer_coordinates_x'] - self.deers[m]['deer_velocity']
+            if movement_decision == 'bwd':
+                self.deers[m]['deer_coordinates_y'] = self.deers[m]['deer_coordinates_y'] - self.deers[m]['deer_velocity']
+            if movement_decision == 'bwd_r':
+                self.deers[m]['deer_coordinates_y'] = self.deers[m]['deer_coordinates_y'] - self.deers[m]['deer_velocity']
+                self.deers[m]['deer_coordinates_x'] = self.deers[m]['deer_coordinates_x'] + self.deers[m]['deer_velocity']
+            if movement_decision == 'bwd_l':
+                self.deers[m]['deer_coordinates_y'] = self.deers[m]['deer_coordinates_y'] - self.deers[m]['deer_velocity']
+                self.deers[m]['deer_coordinates_x'] = self.deers[m]['deer_coordinates_x'] - self.deers[m]['deer_velocity']
+            if movement_decision == 'right':
+                self.deers[m]['deer_coordinates_x'] = self.deers[m]['deer_coordinates_x'] + self.deers[m]['deer_velocity']
+            if movement_decision == 'left':
+                self.deers[m]['deer_coordinates_x'] = self.deers[m]['deer_coordinates_x'] - self.deers[m]['deer_velocity']
+        #print("###############NEW POSITIONING###########")
+        #print(deers)
+        #return deers
 
-    return train_position
+    def extract_deer_position(self):
 
-def ml_speed_decide(deer_position,train_position):
+        deer_positions=[]
 
-    ml_influence_range = [-5,-4,-3,-2,-1,0,1,2,3,4,5]
+        for deer_x in self.deers:
+            b={'deer_coordinates_x':deer_x['deer_coordinates_x'],'deer_coordinates_y':deer_x['deer_coordinates_y']}
+            deer_positions.append(dict(b))
 
-    return ml_influence
-
-def realtime_check(deers,train):
-
-    ml_acceleration_value=ml_speed_decide(extract_deer_position(deers),extract_train_position(train))
-    
-    train['train_velocity']=train['train_velocity']+ml_acceleration_value
-
-    for deer_x in deers:
-        y=0
-        if deer_x['deer_coordinates_x'] == train['train_coordinates_x']:
-            while y <= train['train_velocity']:
-                if deer_x['deer_coordinates_y'] == train['train_coordinates_y'] + y:
-                   print(deer_x['deer_coordinates_y'],train['train_coordinates_y'])
-                   return False
-                y+=1
-    return True
+        return deer_positions
 
 
-def game_move(deers,train):
+    def extract_train_position(self):
 
-    #print(train)
-    #print(deers)
-    while train['train_coordinates_y'] <= 160:
-        if realtime_check(deers,train) == False:
-            return False
+        train_position={'train_coordinates_x':self.train['train_coordinates_x'],
+                        'train_coordinates_y':self.train['train_coordinates_y']}
+
+        return train_position
+
+    def set_speed(self, choice):
+        self.train['train_velocity'] = self.train['train_velocity'] + choice
+
+    def realtime_check(self):
+
+        #ml_acceleration_value=ml_speed_decide(extract_deer_position(deers),extract_train_position(train))
+
+        #train['train_velocity']=train['train_velocity']+ml_acceleration_value
+
+        for deer_x in self.deers:
+            y=0
+            if deer_x['deer_coordinates_x'] == self.train['train_coordinates_x']:
+                while y <= self.train['train_velocity']:
+                    if deer_x['deer_coordinates_y'] == self.train['train_coordinates_y'] + y:
+                       print(deer_x['deer_coordinates_y'],self.train['train_coordinates_y'])
+                       return False
+                    y+=1
+        return True
+
+
+    def game_move(self):
+
+        #print(train)
+        #print(deers)
+        if self.realtime_check() == False:
+            self.game_status = False
         else:
-            deer_move(deers)
-            train_move(train)
-            print(train['train_coordinates_y'],train['train_coordinates_x'])
-    return True
+            self.deer_move()
+            self.train_move()
+            print(self.train['train_coordinates_y'],self.train['train_coordinates_x'])
+            self.game_status = True
 
 
-def start_game(deers,train):
+    def game_result(self):
 
-    reward=0
+        if self.game_status == False:
+            self.reward=self.reward - 10
+            print("GAME WILL BE RESTARTED THERE IS A CRASH")
+        elif self.game.train['train_coordinates_y'] >= 160:
+            self.reward=self.reward + 10
+            print("GAME WILL BE RESTARTED THERE IS NO CRASH")
+            #print("Current Reward is:",reward)
 
-    if game_move(deers,train) == False:
-        reward=reward-10
-        #print("GAME WILL BE RESTARTED THERE IS A CRASH")
-    else:
-        reward=reward + 10
-        #print("GAME WILL BE RESTARTED THERE IS NO CRASH")
-    #print("Current Reward is:",reward)
-
-    return reward
+    def reset_game(self):
+        self.generate_deer
+        self.generate_train
 
 def main():
 
     total_reward = 0
+    game = dvt(2000)
     while True:
-        deers = generate_deer()
-        train = generate_train()
-        total_reward = start_game(deers,train)+total_reward
+
+        if game.train['train_coordinates_y'] >= 160:
+            game.reset_game()
+
+        game.game_move()
+        game.game_result()
+        game.set_speed(ml_output)
+        total_reward = game.reward + total_reward
         print(total_reward)
         #print(train)
         if total_reward == 100:
@@ -144,4 +151,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
